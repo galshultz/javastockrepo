@@ -1,4 +1,4 @@
-package com.myorg.javacourse;
+package com.shultz;
 import java.io.IOException;
 import javax.servlet.http.*;
 

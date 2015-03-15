@@ -6,7 +6,7 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	<servlet>
 		<servlet-name>StockPortfolioJavaCourse</servlet-name>
-		<servlet-class>com.myorg.javacourse.StockPortfolioJavaCourseServlet</servlet-class>
+		<servlet-class>com.shultz.StockPortfolioJavaCourseServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>StockPortfolioJavaCourse</servlet-name>
