@@ -5,10 +5,17 @@ import java.text.*;
 import java.util.*;
 
 public class Stock {
+	
+	static final int BUY = 0;
+	static final int SELL = 1;
+	static final int REMOVE = 2;
+	static final int HOLD = 3;
+
 	private String symbol;
 	private float bid, ask;
 	private java.util.Date date;
-	
+	private int recommendation;
+	private int stockQuantity;
 	private SimpleDateFormat formDate = new SimpleDateFormat("dd/MM/yyyy");
 	
 	
