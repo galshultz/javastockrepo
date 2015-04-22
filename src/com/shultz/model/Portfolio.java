@@ -1,8 +1,5 @@
 package com.shultz.model;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import com.shultz.Stock;
 
 /**
