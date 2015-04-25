@@ -50,7 +50,7 @@ public class Portfolio {
 	public String getHtmlString(){
 		
 		String htmlResString = new String();
-		htmlResString = htmlResString+"<b>"+this.title+"</b> <br>";
+		htmlResString = htmlResString+"<h1>"+this.title+"</h1> <br>";
 		
 		for(int i=0; i<portfolioSize;i++)
 		{
