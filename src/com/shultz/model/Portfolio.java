@@ -11,7 +11,7 @@ import com.shultz.Stock;
  */
 public class Portfolio {
 	
-	static final int MAX_PORTFOLIO_SIZE = 5;
+	private static final int MAX_PORTFOLIO_SIZE = 5;
 	
 	private String title;
 	private Stock[] stocks;
@@ -20,41 +20,50 @@ public class Portfolio {
 	
 	/**
 	 * C'tor of Portfolio.
-	 * Receives the title of the portfolio.
 	 * Creates an instance of an array of Stocks {@link com.shultz.Stock}
 	 * Set the Portfolio Size to start as 0.
 	 * @param title
 	 * 		  the title of the Portfolio
 	 * @see com.shultz.Stock
+	 * @author GalShultz
 	 */
-	public Portfolio(String title) {
-		this.title = title;
+	public Portfolio() {
+		this.title = new String("");
 		this.stocks = new Stock[MAX_PORTFOLIO_SIZE];
 		this.portfolioSize = 0;
 		
 	}
-	
+
+	/**
+	 * Add Stock to the portfolio's array of stocks.
+	 * @param stock
+	 * @author GalShultz
+	 */
 	public void addStock(Stock stock){
 		
-		if(portfolioSize<5)
-		{
+		if(portfolioSize<MAX_PORTFOLIO_SIZE && stock != null){
 			stocks[this.portfolioSize] = stock;
 			portfolioSize++;
+		}
+		
+		else {
+			System.out.println("Sorry, Portfolio is Full OR Stock is NULL");
 		}
 	}
 	
 	/**
 	 * Method uses the portfolio's stock details.
-	 * @return string with portfolio's detains in HTML code.
+	 * @return string with portfolio's details in HTML code.
 	 */
 	public String getHtmlString(){
 		
 		String htmlResString = new String();
-		htmlResString = htmlResString+"<h1>"+this.title+"</h1> <br>";
+		htmlResString = htmlResString+"<h1>"+this.getTitle()+"</h1> <br>";
 		
 		for(int i=0; i<portfolioSize;i++)
 		{
-			htmlResString = htmlResString + stocks[i].getHtmlDescription()+"<br>";
+			Stock tempStock = stocks[i];
+			htmlResString = htmlResString + tempStock.getHtmlDescription()+"<br>";
 		}
 		
 		return htmlResString;	
@@ -76,8 +85,5 @@ public class Portfolio {
 	public static int getMaxPortfolioSize() {
 		return MAX_PORTFOLIO_SIZE;
 	}
-	
-	
-	
 	
 }
