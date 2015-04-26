@@ -28,7 +28,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>StockDetailsServlet</servlet-name>
-		<url-pattern>/stockdetailsservlet</url-pattern>
+		<url-pattern>/stockdetails</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
@@ -37,7 +37,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>PortfolioServlet</servlet-name>
-		<url-pattern>/sortfolioservlet</url-pattern>
+		<url-pattern>/portfolio</url-pattern>
 	</servlet-mapping>
 	
 	<welcome-file-list>
