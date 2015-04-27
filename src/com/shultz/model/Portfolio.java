@@ -60,7 +60,7 @@ public class Portfolio {
 		String htmlResString = new String();
 		htmlResString = htmlResString+"<h1>"+this.getTitle()+"</h1> <br>";
 		
-		for(int i=0; i<portfolioSize;i++)
+		for(int i=0; i<portfolioSize; i++)
 		{
 			Stock tempStock = stocks[i];
 			htmlResString = htmlResString + tempStock.getHtmlDescription()+"<br>";

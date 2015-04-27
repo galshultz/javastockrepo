@@ -4,13 +4,13 @@ package com.shultz;
 import java.text.*;
 import java.util.*;
 
-
+@SuppressWarnings("unused")
 public class Stock {
 	
-	static final int BUY = 0;
-	static final int SELL = 1;
-	static final int REMOVE = 2;
-	static final int HOLD = 3;
+	private static final int BUY = 0;
+	private static final int SELL = 1;
+	private static final int REMOVE = 2;
+	private static final int HOLD = 3;
 
 	private String symbol;
 	private float bid, ask;
