@@ -85,5 +85,9 @@ public class Portfolio {
 	public static int getMaxPortfolioSize() {
 		return MAX_PORTFOLIO_SIZE;
 	}
+
+	public int getPortfolioSize() {
+		return portfolioSize;
+	}
 	
 }
