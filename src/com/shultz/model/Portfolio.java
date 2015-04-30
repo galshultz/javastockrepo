@@ -85,7 +85,7 @@ public class Portfolio {
 	 * Removes all stocks from portfolio with the same symbol as received. 
 	 * @param stockSymbol : the stock's symbol
 	 */
-	public void removeStock(String stockSymbol){
+	public void removeStockName(String stockSymbol){
 		
 		for(int i = 0; i< MAX_PORTFOLIO_SIZE; i++){
 			if((this.stocks[i].getSymbol().equals(stockSymbol)) == true && stocks[i] != null){
@@ -96,6 +96,25 @@ public class Portfolio {
 		}
 		System.out.println("Stock was not found in this Portfolio");
 		return;
+	}
+	
+	/**
+	 * Removes all stocks from portfolio in the place received. 
+	 * @param place : place in array of stocks 
+	 */
+	public void removeStockFromPlace(int place){
+		if(place < 1 || place > 5){
+			System.out.println("Invalid place!");
+			return;
+		}else if (stocks[place-1] == null){
+			System.out.println("Stock was alrady removed, or you have entered a wrong place");
+			return;
+		}else {
+			stocks[place-1] = null;
+			System.out.println("Stock was deleted as per request");
+			return;
+		}
+		
 	}
 	/**
 	 * Method uses the portfolio's stock details.
