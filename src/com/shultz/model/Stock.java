@@ -1,9 +1,17 @@
-package com.shultz;
-
-
+package com.shultz.model;
 import java.text.*;
 import java.util.*;
-
+/**
+ * This class represents a Stock of Stocks.
+ * @param symbol
+ * @param bid : buy value
+ * @param ask : sell value
+ * @param date : creation date
+ * @param recommendation : price recommendation
+ * @param stockQuantity : the amount of stocks of that kind
+ * @author GalShultz
+ * @since 22/4/2015
+ */
 @SuppressWarnings("unused")
 public class Stock {
 	
@@ -43,7 +51,12 @@ public class Stock {
 		this.stockQuantity = 0;				
 	}
 	
+	public Stock (Stock oldStock)
+	{
+		this(oldStock.getSymbol(),oldStock.getBid(),oldStock.getAsk(),oldStock.getDate());
+	}
 	
+
 	/**
 	 * Method uses the stock's details.
 	 * @return string with stock's details in HTML code.

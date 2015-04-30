@@ -3,7 +3,6 @@ package com.shultz.service;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.shultz.Stock;
 import com.shultz.model.*;
 
 public class PortfolioManager {
@@ -11,8 +10,7 @@ public class PortfolioManager {
 
 	public Portfolio getPortfolio(){
 			
-		Portfolio portfolio = new Portfolio();
-		portfolio.setTitle("Portfolio");
+		Portfolio portfolio = new Portfolio("Portfolio");
 		
 		Calendar cal = Calendar.getInstance();
 		cal.set(2014,10,15);
@@ -23,7 +21,7 @@ public class PortfolioManager {
 		Stock stock2;
 		Stock stock3;
 		
-		stock2 = new Stock("AAl", 5.5F, 5.78F,date1);
+		stock2 = new Stock("AAI", 5.5F, 5.78F,date1);
 		stock1 = new Stock ("PIH",12.4F,13.1F,date2);
 		stock3 = new Stock("CAAS", 31.5F, 32.2F,date3);
 		
