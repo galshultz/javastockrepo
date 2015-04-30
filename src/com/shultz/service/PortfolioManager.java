@@ -4,7 +4,12 @@ import java.util.Calendar;
 import java.util.Date;
 
 import com.shultz.model.*;
-
+/**
+ * This class represents a Portfolio Manager this class will execute different methods of Portfolio.
+ * 
+ * @author GalShultz
+ * @since 22/4/2015
+ */
 public class PortfolioManager {
 		
 

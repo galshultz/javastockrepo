@@ -51,6 +51,10 @@ public class Stock {
 		this.stockQuantity = 0;				
 	}
 	
+	/**
+	 * Copy C'tor of Stock class.
+	 * @param oldStock
+	 */
 	public Stock (Stock oldStock)
 	{
 		this(oldStock.getSymbol(),oldStock.getBid(),oldStock.getAsk(),oldStock.getDate());
