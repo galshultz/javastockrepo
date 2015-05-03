@@ -57,7 +57,10 @@ public class Stock {
 	 */
 	public Stock (Stock oldStock)
 	{
-		this(oldStock.getSymbol(),oldStock.getBid(),oldStock.getAsk(),oldStock.getDate());
+		// חשוב מאוד לשים לב שבזמן שיצרנו לפני התרגול את האינסטנס
+		//ל״תאריך״ לא יצרנו אינסטנס חדש אלא העתקנו. במצב הנוכחי אנחנו מייצרים אינסטנס חדש
+		
+		this(oldStock.getSymbol(),oldStock.getBid(),oldStock.getAsk(),new Date(oldStock.getDate().getTime()));
 		this.recommendation = oldStock.getRecommendation();
 		this.stockQuantity = oldStock.getStockQuantity();
 	}

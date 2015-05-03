@@ -30,7 +30,7 @@ public class Portfolio {
 	 */
 	
 	public Portfolio(String string) {
-		this.title = new String(string);
+		this.title = string;
 		this.stocks = new Stock[MAX_PORTFOLIO_SIZE];
 		this.portfolioSize = 0;
 	}
@@ -70,12 +70,12 @@ public class Portfolio {
 	 * @author GalShultz
 	 */
 	public void addStock(Stock stock){
-		
+
 		if(portfolioSize<MAX_PORTFOLIO_SIZE && stock != null){
 			stocks[this.portfolioSize] = stock;
 			this.portfolioSize++;
 		}
-		
+
 		else {
 			System.out.println("Sorry, Portfolio is Full OR Stock is NULL");
 		}
@@ -85,11 +85,16 @@ public class Portfolio {
 	 * Removes all stocks from portfolio with the same symbol as received. 
 	 * @param stockSymbol : the stock's symbol
 	 */
-	public void removeStock(Stock stock){
+	public void removeStock(String stockName){
 		
 		for(int i = 0; i< MAX_PORTFOLIO_SIZE; i++){
-			if((this.stocks[i].getSymbol().equals(stock.getSymbol())) == true && stocks[i] != null){
-				stocks[i] = null;
+			if((this.stocks[i].getSymbol().equals(stockName) == true && stocks[i] != null)){
+				if (portfolioSize != 1){
+				stocks[i] = stocks[portfolioSize-1];
+				}else  if (portfolioSize == 1){
+					stocks[i]=null;
+				}
+				portfolioSize--;
 				System.out.println("Stock was deleted as per request");
 				return;
 			}
@@ -98,24 +103,6 @@ public class Portfolio {
 		return;
 	}
 	
-	/**
-	 * Removes all stocks from portfolio in the place received. 
-	 * @param place : place in array of stocks 
-	 */
-	public void removeStockFromPlace(int place){
-		if(place < 1 || place > 5){
-			System.out.println("Invalid place!");
-			return;
-		}else if (stocks[place-1] == null){
-			System.out.println("Stock was alrady removed, or you have entered a wrong place");
-			return;
-		}else {
-			stocks[place-1] = null;
-			System.out.println("Stock was deleted as per request");
-			return;
-		}
-		
-	}
 	/**
 	 * Method uses the portfolio's stock details.
 	 * @return string with portfolio's details in HTML code.
@@ -155,5 +142,6 @@ public class Portfolio {
 	public int getPortfolioSize() {
 		return portfolioSize;
 	}
+
 	
 }
