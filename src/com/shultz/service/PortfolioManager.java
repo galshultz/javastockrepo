@@ -11,8 +11,11 @@ import com.shultz.model.*;
  * @since 22/4/2015
  */
 public class PortfolioManager {
-		
-
+			
+	/**
+	 * Return a new Portfolio instance.
+	 * @return
+	 */
 	public Portfolio getPortfolio(){
 			
 		Portfolio portfolio = new Portfolio("Portfolio");

@@ -41,8 +41,8 @@ public class Portfolio {
 	 * @author GalShultz
 	 */
 	public Portfolio (Portfolio oldPortfolio){
-		this(oldPortfolio.getTitle());
 		
+		this(oldPortfolio.getTitle());
 		this.portfolioSize = oldPortfolio.getPortfolioSize();
 		
 		copyStocksArray(oldPortfolio.getStocks(), this.getStocks());	
@@ -73,7 +73,7 @@ public class Portfolio {
 		
 		if(portfolioSize<MAX_PORTFOLIO_SIZE && stock != null){
 			stocks[this.portfolioSize] = stock;
-			portfolioSize++;
+			this.portfolioSize++;
 		}
 		
 		else {
@@ -85,10 +85,10 @@ public class Portfolio {
 	 * Removes all stocks from portfolio with the same symbol as received. 
 	 * @param stockSymbol : the stock's symbol
 	 */
-	public void removeStockName(String stockSymbol){
+	public void removeStock(Stock stock){
 		
 		for(int i = 0; i< MAX_PORTFOLIO_SIZE; i++){
-			if((this.stocks[i].getSymbol().equals(stockSymbol)) == true && stocks[i] != null){
+			if((this.stocks[i].getSymbol().equals(stock.getSymbol())) == true && stocks[i] != null){
 				stocks[i] = null;
 				System.out.println("Stock was deleted as per request");
 				return;
