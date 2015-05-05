@@ -87,6 +87,11 @@ public class Portfolio {
 	 */
 	public void removeStock(String stockName){
 		
+		if (stockName == null){
+			System.out.println("The stock received is invalid!");
+			return;
+		}
+	
 		for(int i = 0; i< MAX_PORTFOLIO_SIZE; i++){
 			if((this.stocks[i].getSymbol().equals(stockName) == true && stocks[i] != null)){
 				if (portfolioSize != 1){
