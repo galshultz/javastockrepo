@@ -131,7 +131,7 @@ public class Portfolio {
 
 	/**
 	 * Method return true if the stock recommendation was updated to SELL otherwise return false. an error will be shown 
-	 * on screen in case of an error.
+	 * on screen in case of one.
 	 * Method will update the stock quantity as per request. In case quantity will be "-1" the entire stock quantity 
 	 * will be sold
 	 * 
@@ -140,7 +140,6 @@ public class Portfolio {
 	 * @return TRUE in case of success, otherwise FALSE.
 	 */
 	public boolean sellStock(String symbol, int quantity){
-
 		if(symbol == null || quantity < -1){
 			System.out.println("There is an error! Please check your stock symbol or stock quntity.");
 			return false;
@@ -175,6 +174,89 @@ public class Portfolio {
 	}
 	
 	/**
+	 * Method return true if the stock recommendation was updated to BUY otherwise return false. an error will be shown 
+	 * on screen in case of one.
+	 * Method will update the stock quantity as per request. In case quantity will be "-1" the entire balance quantity 
+	 * will be used
+	 * 
+	 * @param symbol
+	 * @param quantity
+	 * @return TRUE in case of success, otherwise FALSE.
+	 */
+	// ASK REGARDING THE STATUS!!! WHY SHOULD IT BE BUY, WHAT IS THE LOGIC BEHIND THIS ENUMS??
+
+	public boolean buyStock(Stock stock, int quantity){
+		int i =0;
+		if(stock == null || quantity < -1){
+			System.out.println("There is an error! Please check your stock symbol or stock quntity.");
+			return false;
+		}
+		if(quantity*stock.getAsk() > this.balance){
+			System.out.println("Not enough balance to complete purchase.");
+			return false;
+		}
+		for(i = 0; i< this.portfolioSize; i++){
+
+			if(this.stocks[i].getSymbol().equals(stock.getSymbol()) == true){
+				
+				if(quantity == -1){
+					int howManyToBuy = (int)this.balance/(int)this.stocks[i].getAsk();
+					this.balance -= howManyToBuy*this.stocks[i].getAsk();
+					this.stocks[i].setStockQuantity(this.stocks[i].getStockQuantity()+howManyToBuy);
+					this.stocks[i].setRecommendation(ALGO_RECOMMENDATION.BUY);
+					System.out.println("Entire stock ("+stock.getSymbol()+") holdings that could be bought "
+							+ "was bought succefully.");
+					return true;
+
+				}else {
+					this.stocks[i].setRecommendation(ALGO_RECOMMENDATION.BUY);
+					this.balance -= quantity*this.stocks[i].getAsk();
+					this.stocks[i].setStockQuantity(stocks[i].getStockQuantity()+quantity);
+					System.out.println("An amount of "+quantity+" of stock ("+stock.getSymbol()+") was bought succefully");
+					return true;
+				}
+			}
+
+		}
+		if(i == portfolioSize){
+			System.out.println("Please note that the portfolio has reached it's maximum stock capacity.");
+			return false;
+		}else{
+			this.addStock(stock);
+			this.balance -= quantity*this.stocks[portfolioSize -1].getAsk();
+			this.stocks[portfolioSize -1].setStockQuantity(quantity);
+			System.out.println("Stock "+stock.getSymbol()+" was added successfuly to the portfolio. With quantity of "
+					+ quantity+" stocks.");
+			return true;
+			
+		}
+	}	
+
+	/**
+	 * Method calculates the portfolio's total stocks value.
+	 * @return float representing portfolio's total stocks value.
+	 * @author GalShultz
+	 */
+	public float getStocksValue(){
+		float totalValue =0;
+		for(int i = 0; i<this.portfolioSize ;i++){
+			totalValue += this.stocks[i].getStockQuantity()+this.stocks[i].getBid();
+		}
+		return totalValue;		
+	}
+	
+	/**
+	 * Method calculates the portfolio's total value.
+	 * @return float representing portfolio's total value.
+	 * @author GalShultz
+	 */
+	public float getTotalValue(){
+		
+		return this.getStocksValue()+this.balance;		
+	}
+	
+	
+	/**
 	 * Method uses the portfolio's stock details.
 	 * @return string with portfolio's details in HTML code.
 	 */
@@ -190,7 +272,8 @@ public class Portfolio {
 				htmlResString = htmlResString + tempStock.getHtmlDescription()+"<br>";
 			}
 		}
-		
+		htmlResString += "Total Portfolio Value :"+this.getTotalValue()+ "$.<br>"+
+		"Total Stocks Value :"+this.getStocksValue()+"$. <br>"+"Balance :"+this.balance+"$.";
 		return htmlResString;	
 	}
 	
@@ -229,18 +312,14 @@ public class Portfolio {
 	public int getPortfolioSize() {
 		return portfolioSize;
 	}
-
 	public void setPortfolioSize(int portfolioSize) {
 		this.portfolioSize = portfolioSize;
 	}
-
 	public float getBalance() {
 		return balance;
 	}
-
 	public void setBalance(float balance) {
 		this.balance = balance;
 	}
 
-	
 }
