@@ -121,7 +121,7 @@ public class Portfolio {
 					stocks[i]=null;
 				}
 				portfolioSize--;
-				System.out.println("Stock was deleted as per request");
+				System.out.println("Stock "+stockName+" was deleted as per request");
 				return true;
 			}
 		}
@@ -204,6 +204,7 @@ public class Portfolio {
 					this.balance -= howManyToBuy*this.stocks[i].getAsk();
 					this.stocks[i].setStockQuantity(this.stocks[i].getStockQuantity()+howManyToBuy);
 					this.stocks[i].setRecommendation(ALGO_RECOMMENDATION.BUY);
+					this.stocks[i].setStockQuantity(0);
 					System.out.println("Entire stock ("+stock.getSymbol()+") holdings that could be bought "
 							+ "was bought succefully.");
 					return true;
@@ -218,7 +219,7 @@ public class Portfolio {
 			}
 
 		}
-		if(i == portfolioSize){
+		if(i == MAX_PORTFOLIO_SIZE){
 			System.out.println("Please note that the portfolio has reached it's maximum stock capacity.");
 			return false;
 		}else{

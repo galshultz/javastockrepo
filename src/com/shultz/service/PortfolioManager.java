@@ -18,10 +18,11 @@ public class PortfolioManager {
 	 */
 	public Portfolio getPortfolio(){
 			
-		Portfolio portfolio = new Portfolio("Portfolio");
+		Portfolio portfolio = new Portfolio("Exercise 7 portfolio ");
+		portfolio.setBalance(10000);
 		
 		Calendar cal = Calendar.getInstance();
-		cal.set(2014,10,15);
+		cal.set(2014,11,15);
 		Date date1 = cal.getTime();
 		Date date2 = cal.getTime();
 		Date date3 = cal.getTime(); 
@@ -29,14 +30,22 @@ public class PortfolioManager {
 		Stock stock2;
 		Stock stock3;
 		
-		stock2 = new Stock("AAI", 5.5F, 5.78F,date1);
-		stock1 = new Stock ("PIH",12.4F,13.1F,date2);
-		stock3 = new Stock("CAAS", 31.5F, 32.2F,date3);
+		stock1 = new Stock ("PIH",8.5F,10F,date2);
+		stock2 = new Stock("AAL", 25.5F, 30F,date1);
+		stock3 = new Stock("CAAS", 15.5F, 20F,date3);
 		
+		portfolio.buyStock(stock1, 20);
+		portfolio.buyStock(stock2, 30);
+		portfolio.buyStock(stock3, 40);
+		
+		portfolio.sellStock("AAL", -1);
+		portfolio.removeStock("CAAS");
+		
+		/*
 		portfolio.addStock(stock2);
 		portfolio.addStock(stock1);
 		portfolio.addStock(stock3);
-		
+		*/
 		return portfolio;
 	}
 }
