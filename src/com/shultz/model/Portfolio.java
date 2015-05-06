@@ -43,7 +43,7 @@ public class Portfolio {
 	public Portfolio (Portfolio oldPortfolio){
 		
 		this(oldPortfolio.getTitle());
-		this.portfolioSize = oldPortfolio.getPortfolioSize();
+		this.setPortfolioSize(oldPortfolio.getPortfolioSize());
 		
 		copyStocksArray(oldPortfolio.getStocks(), this.getStocks());	
 	}
@@ -146,6 +146,10 @@ public class Portfolio {
 	}
 	public int getPortfolioSize() {
 		return portfolioSize;
+	}
+
+	public void setPortfolioSize(int portfolioSize) {
+		this.portfolioSize = portfolioSize;
 	}
 
 	
