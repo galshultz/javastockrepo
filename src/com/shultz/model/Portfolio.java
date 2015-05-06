@@ -1,6 +1,7 @@
 package com.shultz.model;
 
 import com.shultz.*;
+import com.sun.org.apache.bcel.internal.generic.RETURN;
 
 /**
  * This class represents a Portfolio of Stocks.
@@ -75,6 +76,7 @@ public class Portfolio {
 	 * @param stock : a refferance of Stock type
 	 * @author GalShultz
 	 */
+	//ASK IF WE SHOULD CHANGE THIS FUNCTION TO BOOLEAN OR NOT?!
 	public void addStock(Stock stock){
 
 		if(portfolioSize == MAX_PORTFOLIO_SIZE){
@@ -92,6 +94,7 @@ public class Portfolio {
 			}
 		}
 		stocks[this.portfolioSize] = stock;
+		stocks[this.portfolioSize].setStockQuantity(0); // NOT ACTUALLY NEEDED CAUSE WHEN WE CREATE STOCK DEFAULD IS 0.
 		this.portfolioSize++;
 		return;
 	}
@@ -101,27 +104,74 @@ public class Portfolio {
 	 * Removes all stocks from portfolio with the same symbol as received. 
 	 * @param stockSymbol : the stock's symbol
 	 */
-	public void removeStock(String stockName){
+	public boolean removeStock(String stockName){
 		
 		if (stockName == null){
 			System.out.println("The stock received is invalid!");
-			return;
+			return false;
 		}
 	
-		for(int i = 0; i< MAX_PORTFOLIO_SIZE; i++){
-			if((this.stocks[i].getSymbol().equals(stockName) == true && stocks[i] != null)){
+		for(int i = 0; i< this.portfolioSize; i++){
+			if((this.stocks[i].getSymbol().equals(stockName) == true)){
 				if (portfolioSize != 1){
-				stocks[i] = stocks[portfolioSize-1];
-				}else  if (portfolioSize == 1){
+				stocks[i] = stocks[this.portfolioSize-1];
+				this.sellStock(stocks[i].getSymbol(), -1);
+				}else  if (this.portfolioSize == 1){
+					this.sellStock(stocks[i].getSymbol(), -1);
 					stocks[i]=null;
 				}
 				portfolioSize--;
 				System.out.println("Stock was deleted as per request");
-				return;
+				return true;
 			}
 		}
 		System.out.println("Stock was not found in this Portfolio");
-		return;
+		return false;
+	}
+
+	/**
+	 * Method return true if the stock recommendation was updated to SELL otherwise return false. an error will be shown 
+	 * on screen in case of an error.
+	 * Method will update the stock quantity as per request. In case quantity will be "-1" the entire stock quantity 
+	 * will be sold
+	 * 
+	 * @param symbol
+	 * @param quantity
+	 * @return TRUE in case of success, otherwise FALSE.
+	 */
+	public boolean sellStock(String symbol, int quantity){
+
+		if(symbol == null || quantity < -1){
+			System.out.println("There is an error! Please check your stock symbol or stock quntity.");
+			return false;
+		}
+		for(int i = 0; i< this.portfolioSize; i++){
+
+			if(this.stocks[i].getSymbol().equals(symbol) == true){
+
+				if(this.stocks[i].getStockQuantity() - quantity < 0){
+					System.out.println("Not enough stocks to sell");
+					return false;
+
+				}else if(quantity == -1){
+					this.balance += this.stocks[i].getStockQuantity()*this.stocks[i].getBid();
+					this.stocks[i].setStockQuantity(0);
+					this.stocks[i].setRecommendation(ALGO_RECOMMENDATION.SELL);
+					System.out.println("Entire stock ("+symbol+") holdings was sold succefully");
+					return true;
+
+				}else {
+					this.stocks[i].setRecommendation(ALGO_RECOMMENDATION.SELL);
+					this.balance += quantity*this.stocks[i].getBid();
+					this.stocks[i].setStockQuantity(stocks[i].getStockQuantity()-quantity);
+					System.out.println("An amount of "+quantity+" of stock ("+symbol+") was sold succefully");
+					return true;
+				}
+			}
+
+		}
+		System.out.println("Stock was not found in this Portfolio");
+		return false; 
 	}
 	
 	/**
@@ -145,14 +195,11 @@ public class Portfolio {
 	}
 	
 	
-	
-	
 	/**
 	 * method receives amount and calculates the current balance.
 	 * @param amount
 	 * @author GalShultz
 	 */
-	
 	public void updateBalance (float amount){
 		float tempBalance = this.balance + amount;
 		if(tempBalance < 0){

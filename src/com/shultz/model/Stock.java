@@ -13,7 +13,6 @@ import com.shultz.model.Portfolio.ALGO_RECOMMENDATION;
  * @author GalShultz
  * @since 22/4/2015
  */
-@SuppressWarnings("unused")
 public class Stock {
 	
 
