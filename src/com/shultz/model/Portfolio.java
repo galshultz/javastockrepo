@@ -14,9 +14,14 @@ public class Portfolio {
 	
 	private static final int MAX_PORTFOLIO_SIZE = 5;
 	
+	public enum ALGO_RECOMMENDATION {
+		BUY, SELL, REMOVE, HOLD 
+	}
+	
 	private String title;
 	private Stock[] stocks;
 	private int portfolioSize;
+	private float balance;
 	
 	
 	/**
@@ -33,6 +38,7 @@ public class Portfolio {
 		this.title = string;
 		this.stocks = new Stock[MAX_PORTFOLIO_SIZE];
 		this.portfolioSize = 0;
+		this.balance = 0;
 	}
 	
 	/**
@@ -71,15 +77,25 @@ public class Portfolio {
 	 */
 	public void addStock(Stock stock){
 
-		if(portfolioSize<MAX_PORTFOLIO_SIZE && stock != null){
-			stocks[this.portfolioSize] = stock;
-			this.portfolioSize++;
+		if(portfolioSize == MAX_PORTFOLIO_SIZE){
+			System.out.println("Can’t add new stock, portfolio can have only "+this.portfolioSize+" stocks”");
+			return;
+		}else if (stock == null){
+			System.out.println("There is an error with stock received! (Check if it it istanciated)");
+			return;
+		}else {
+			for(int i = 0; i< this.portfolioSize; i++){
+				if(stock.getSymbol() == this.stocks[i].getSymbol()){
+					System.out.println("Stock already exists in portfolio.");
+					return;
+				}
+			}
 		}
-
-		else {
-			System.out.println("Sorry, Portfolio is Full OR Stock is NULL");
-		}
+		stocks[this.portfolioSize] = stock;
+		this.portfolioSize++;
+		return;
 	}
+	
 	
 	/**
 	 * Removes all stocks from portfolio with the same symbol as received. 
@@ -129,6 +145,25 @@ public class Portfolio {
 	}
 	
 	
+	
+	
+	/**
+	 * method receives amount and calculates the current balance.
+	 * @param amount
+	 * @author GalShultz
+	 */
+	
+	public void updateBalance (float amount){
+		float tempBalance = this.balance + amount;
+		if(tempBalance < 0){
+			System.out.println("Please note you may not change balance to negative amount!");
+		}else {
+			this.balance = tempBalance;
+			System.out.println("Balance has been updated to "+ this.balance);
+		}
+		
+	}
+	
 	public String getTitle() {
 		return title;
 	}
@@ -150,6 +185,14 @@ public class Portfolio {
 
 	public void setPortfolioSize(int portfolioSize) {
 		this.portfolioSize = portfolioSize;
+	}
+
+	public float getBalance() {
+		return balance;
+	}
+
+	public void setBalance(float balance) {
+		this.balance = balance;
 	}
 
 	
