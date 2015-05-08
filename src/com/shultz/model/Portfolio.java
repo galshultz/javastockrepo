@@ -202,7 +202,7 @@ public class Portfolio {
 			return false;
 		}
 		for(i = 0; i< this.portfolioSize; i++){
-
+			// THIS BLOCK REFEST TO THE CASE THAT THE STOCK ALREADY EXIST IN OUR STOCK ARRAY.
 			if(this.stocks[i].getSymbol().equals(stock.getSymbol()) == true){
 				
 				if(quantity == -1){
@@ -224,17 +224,30 @@ public class Portfolio {
 			}
 
 		}
+		
+		// THIS BLOCK REFEST TO THE CASE THAT THE STOCK DOES NOT EXIST IN OUR STOCK ARRAY.
 		if(i == MAX_PORTFOLIO_SIZE){
 			System.out.println("Please note that the portfolio has reached it's maximum stock capacity.");
 			return false;
-		}else{
-			this.addStock(stock);
+		}
+
+		if (quantity == -1){
+			this.addStock(stock); //add the stock to portfolioSize-1 in the stocks array.
+			int howManyToBuy = (int)this.balance/(int)this.stocks[i].getAsk();
+			this.balance -= howManyToBuy*this.stocks[this.portfolioSize-1].getAsk();
+			this.stocks[i].setStockQuantity(this.stocks[this.portfolioSize-1].getStockQuantity()+howManyToBuy);
+			this.stocks[i].setRecommendation(ALGO_RECOMMENDATION.BUY);
+			System.out.println("Entire stock ("+stock.getSymbol()+") holdings that could be bought "
+					+ "was bought succefully.");
+			return true;
+		} else {
+			this.addStock(stock); //add the stock to portfolioSize-1 in the stocks array.
 			this.balance -= quantity*this.stocks[portfolioSize -1].getAsk();
-			this.stocks[portfolioSize -1].setStockQuantity(quantity);
+			this.stocks[this.portfolioSize -1].setStockQuantity(quantity);
 			System.out.println("Stock "+stock.getSymbol()+" was added successfuly to the portfolio. With quantity of "
 					+ quantity+" stocks.");
 			return true;
-			
+
 		}
 	}	
 
