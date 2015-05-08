@@ -51,7 +51,7 @@ public class Portfolio {
 		
 		this(oldPortfolio.getTitle());
 		this.setPortfolioSize(oldPortfolio.getPortfolioSize());
-		
+		this.setBalance(oldPortfolio.getBalance());
 		copyStocksArray(oldPortfolio.getStocks(), this.getStocks());	
 	}
 
@@ -87,7 +87,7 @@ public class Portfolio {
 			return;
 		}else {
 			for(int i = 0; i< this.portfolioSize; i++){
-				if(stock.getSymbol() == this.stocks[i].getSymbol()){
+				if(stock.getSymbol().equals(this.stocks[i].getSymbol())){
 					System.out.println("Stock already exists in portfolio.");
 					return;
 				}
@@ -112,10 +112,13 @@ public class Portfolio {
 		}
 	
 		for(int i = 0; i< this.portfolioSize; i++){
+			
 			if((this.stocks[i].getSymbol().equals(stockName) == true)){
-				if (portfolioSize != 1){
-				stocks[i] = stocks[this.portfolioSize-1];
-				this.sellStock(stocks[i].getSymbol(), -1);
+				if (portfolioSize > 1){
+					this.sellStock(stocks[i].getSymbol(), -1);
+					stocks[i] = stocks[this.portfolioSize-1];
+					stocks[this.portfolioSize-1]=null;
+					
 				}else  if (this.portfolioSize == 1){
 					this.sellStock(stocks[i].getSymbol(), -1);
 					stocks[i]=null;
@@ -139,11 +142,14 @@ public class Portfolio {
 	 * @param quantity
 	 * @return TRUE in case of success, otherwise FALSE.
 	 */
+	
 	public boolean sellStock(String symbol, int quantity){
+	
 		if(symbol == null || quantity < -1){
 			System.out.println("There is an error! Please check your stock symbol or stock quntity.");
 			return false;
 		}
+		
 		for(int i = 0; i< this.portfolioSize; i++){
 
 			if(this.stocks[i].getSymbol().equals(symbol) == true){
@@ -154,14 +160,14 @@ public class Portfolio {
 
 				}else if(quantity == -1){
 					this.balance += this.stocks[i].getStockQuantity()*this.stocks[i].getBid();
-					this.stocks[i].setStockQuantity(0);
 					this.stocks[i].setRecommendation(ALGO_RECOMMENDATION.SELL);
+					this.stocks[i].setStockQuantity(0);
 					System.out.println("Entire stock ("+symbol+") holdings was sold succefully");
 					return true;
 
 				}else {
-					this.stocks[i].setRecommendation(ALGO_RECOMMENDATION.SELL);
 					this.balance += quantity*this.stocks[i].getBid();
+					this.stocks[i].setRecommendation(ALGO_RECOMMENDATION.SELL);
 					this.stocks[i].setStockQuantity(stocks[i].getStockQuantity()-quantity);
 					System.out.println("An amount of "+quantity+" of stock ("+symbol+") was sold succefully");
 					return true;
@@ -186,7 +192,7 @@ public class Portfolio {
 	// ASK REGARDING THE STATUS!!! WHY SHOULD IT BE BUY, WHAT IS THE LOGIC BEHIND THIS ENUMS??
 
 	public boolean buyStock(Stock stock, int quantity){
-		int i =0;
+		int i = 0;
 		if(stock == null || quantity < -1){
 			System.out.println("There is an error! Please check your stock symbol or stock quntity.");
 			return false;
@@ -204,7 +210,6 @@ public class Portfolio {
 					this.balance -= howManyToBuy*this.stocks[i].getAsk();
 					this.stocks[i].setStockQuantity(this.stocks[i].getStockQuantity()+howManyToBuy);
 					this.stocks[i].setRecommendation(ALGO_RECOMMENDATION.BUY);
-					this.stocks[i].setStockQuantity(0);
 					System.out.println("Entire stock ("+stock.getSymbol()+") holdings that could be bought "
 							+ "was bought succefully.");
 					return true;
@@ -241,7 +246,7 @@ public class Portfolio {
 	public float getStocksValue(){
 		float totalValue =0;
 		for(int i = 0; i<this.portfolioSize ;i++){
-			totalValue += this.stocks[i].getStockQuantity()+this.stocks[i].getBid();
+			totalValue += this.stocks[i].getStockQuantity()*this.stocks[i].getBid();
 		}
 		return totalValue;		
 	}

@@ -50,6 +50,7 @@ public class Stock {
 	/**
 	 * Copy C'tor of Stock class.
 	 * @param oldStock
+	 * @author GalShultz
 	 */
 	public Stock (Stock oldStock)
 	{
