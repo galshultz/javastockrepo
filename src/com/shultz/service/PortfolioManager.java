@@ -19,7 +19,7 @@ public class PortfolioManager {
 	public Portfolio getPortfolio(){
 			
 		Portfolio portfolio = new Portfolio("Exercise 7 portfolio ");
-		portfolio.setBalance(10000);
+		portfolio.updateBalance(10000);
 		
 		Calendar cal = Calendar.getInstance();
 		cal.set(2014,11,15);
@@ -41,11 +41,6 @@ public class PortfolioManager {
 		portfolio.sellStock("AAL", -1);
 		portfolio.removeStock("CAAS");
 		
-		/*
-		portfolio.addStock(stock2);
-		portfolio.addStock(stock1);
-		portfolio.addStock(stock3);
-		*/
 		return portfolio;
 	}
 }

@@ -1,5 +1,7 @@
 package com.shultz.model;
 
+import java.text.DecimalFormat;
+
 import com.shultz.*;
 import com.sun.org.apache.bcel.internal.generic.RETURN;
 
@@ -50,8 +52,8 @@ public class Portfolio {
 	public Portfolio (Portfolio oldPortfolio){
 		
 		this(oldPortfolio.getTitle());
-		this.setPortfolioSize(oldPortfolio.getPortfolioSize());
-		this.setBalance(oldPortfolio.getBalance());
+		this.portfolioSize = oldPortfolio.getPortfolioSize();
+		this.updateBalance(oldPortfolio.getBalance());
 		copyStocksArray(oldPortfolio.getStocks(), this.getStocks());	
 	}
 
@@ -159,15 +161,13 @@ public class Portfolio {
 					return false;
 
 				}else if(quantity == -1){
-					this.balance += this.stocks[i].getStockQuantity()*this.stocks[i].getBid();
-					this.stocks[i].setRecommendation(ALGO_RECOMMENDATION.SELL);
+					this.updateBalance(this.stocks[i].getStockQuantity()*this.stocks[i].getBid());
 					this.stocks[i].setStockQuantity(0);
 					System.out.println("Entire stock ("+symbol+") holdings was sold succefully");
 					return true;
 
 				}else {
-					this.balance += quantity*this.stocks[i].getBid();
-					this.stocks[i].setRecommendation(ALGO_RECOMMENDATION.SELL);
+					this.updateBalance(quantity*this.stocks[i].getBid());
 					this.stocks[i].setStockQuantity(stocks[i].getStockQuantity()-quantity);
 					System.out.println("An amount of "+quantity+" of stock ("+symbol+") was sold succefully");
 					return true;
@@ -189,7 +189,6 @@ public class Portfolio {
 	 * @param quantity
 	 * @return TRUE in case of success, otherwise FALSE.
 	 */
-	// ASK REGARDING THE STATUS!!! WHY SHOULD IT BE BUY, WHAT IS THE LOGIC BEHIND THIS ENUMS??
 
 	public boolean buyStock(Stock stock, int quantity){
 		int i = 0;
@@ -207,16 +206,14 @@ public class Portfolio {
 				
 				if(quantity == -1){
 					int howManyToBuy = (int)this.balance/(int)this.stocks[i].getAsk();
-					this.balance -= howManyToBuy*this.stocks[i].getAsk();
+					this.updateBalance(-howManyToBuy*this.stocks[i].getAsk());
 					this.stocks[i].setStockQuantity(this.stocks[i].getStockQuantity()+howManyToBuy);
-					this.stocks[i].setRecommendation(ALGO_RECOMMENDATION.BUY);
 					System.out.println("Entire stock ("+stock.getSymbol()+") holdings that could be bought "
 							+ "was bought succefully.");
 					return true;
 
 				}else {
-					this.stocks[i].setRecommendation(ALGO_RECOMMENDATION.BUY);
-					this.balance -= quantity*this.stocks[i].getAsk();
+					this.updateBalance(-quantity*this.stocks[i].getAsk());
 					this.stocks[i].setStockQuantity(stocks[i].getStockQuantity()+quantity);
 					System.out.println("An amount of "+quantity+" of stock ("+stock.getSymbol()+") was bought succefully");
 					return true;
@@ -234,15 +231,14 @@ public class Portfolio {
 		if (quantity == -1){
 			this.addStock(stock); //add the stock to portfolioSize-1 in the stocks array.
 			int howManyToBuy = (int)this.balance/(int)this.stocks[i].getAsk();
-			this.balance -= howManyToBuy*this.stocks[this.portfolioSize-1].getAsk();
+			this.updateBalance(-(howManyToBuy*this.stocks[this.portfolioSize-1].getAsk()));
 			this.stocks[i].setStockQuantity(this.stocks[this.portfolioSize-1].getStockQuantity()+howManyToBuy);
-			this.stocks[i].setRecommendation(ALGO_RECOMMENDATION.BUY);
 			System.out.println("Entire stock ("+stock.getSymbol()+") holdings that could be bought "
 					+ "was bought succefully.");
 			return true;
 		} else {
 			this.addStock(stock); //add the stock to portfolioSize-1 in the stocks array.
-			this.balance -= quantity*this.stocks[portfolioSize -1].getAsk();
+			this.updateBalance(-quantity*this.stocks[portfolioSize -1].getAsk());
 			this.stocks[this.portfolioSize -1].setStockQuantity(quantity);
 			System.out.println("Stock "+stock.getSymbol()+" was added successfuly to the portfolio. With quantity of "
 					+ quantity+" stocks.");
@@ -280,7 +276,7 @@ public class Portfolio {
 	 * @return string with portfolio's details in HTML code.
 	 */
 	public String getHtmlString(){
-		
+		DecimalFormat decimalFormat=new DecimalFormat("#.#"); // SHOULD WE USE IT OR NOT?
 		String htmlResString = new String();
 		htmlResString = htmlResString+"<h1>"+this.getTitle()+"</h1> <br>";
 		
@@ -291,8 +287,8 @@ public class Portfolio {
 				htmlResString = htmlResString + tempStock.getHtmlDescription()+"<br>";
 			}
 		}
-		htmlResString += "Total Portfolio Value :"+this.getTotalValue()+ "$.<br>"+
-		"Total Stocks Value :"+this.getStocksValue()+"$. <br>"+"Balance :"+this.balance+"$.";
+		htmlResString += "Total Portfolio Value :"+this.getTotalValue()+ "$, "+
+		"Total Stocks Value :"+this.getStocksValue()+"$, "+"Balance :"+this.balance+"$.";
 		return htmlResString;	
 	}
 	
@@ -331,14 +327,10 @@ public class Portfolio {
 	public int getPortfolioSize() {
 		return portfolioSize;
 	}
-	public void setPortfolioSize(int portfolioSize) {
-		this.portfolioSize = portfolioSize;
-	}
+
 	public float getBalance() {
 		return balance;
 	}
-	public void setBalance(float balance) {
-		this.balance = balance;
-	}
+
 
 }
