@@ -108,11 +108,5 @@ public class Stock {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	public SimpleDateFormat getFormDate() {
-		return formDate;
-	}
-	public void setFormDate(SimpleDateFormat formDate) {
-		this.formDate = formDate;
-	}
 	
 }

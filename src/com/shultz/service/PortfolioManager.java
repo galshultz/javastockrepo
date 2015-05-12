@@ -18,8 +18,8 @@ public class PortfolioManager {
 	 */
 	public Portfolio getPortfolio(){
 			
-		Portfolio portfolio = new Portfolio("Exercise 7 portfolio ");
-		portfolio.updateBalance(10000);
+		Portfolio myPortfolio = new Portfolio("Exercise 7 portfolio ");
+		myPortfolio.updateBalance(10000);
 		
 		Calendar cal = Calendar.getInstance();
 		cal.set(2014,11,15);
@@ -34,14 +34,14 @@ public class PortfolioManager {
 		stock2 = new Stock("AAL", 25.5F, 30F,date1);
 		stock3 = new Stock("CAAS", 15.5F, 20F,date3);
 		
-		portfolio.buyStock(stock1, 20);
-		portfolio.buyStock(stock2, 30);
-		portfolio.buyStock(stock3, 40);
+		myPortfolio.buyStock(stock1, 20);
+		myPortfolio.buyStock(stock2, 30);
+		myPortfolio.buyStock(stock3, 40);
 		
-		portfolio.sellStock("AAL", -1);
-		portfolio.removeStock("CAAS");
+		myPortfolio.sellStock("AAL", -1);
+		myPortfolio.removeStock("CAAS");
 		
-		return portfolio;
+		return myPortfolio;
 	}
 }
 		
