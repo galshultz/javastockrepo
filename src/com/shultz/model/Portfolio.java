@@ -3,6 +3,7 @@ package com.shultz.model;
 import java.text.DecimalFormat;
 
 import com.shultz.*;
+import com.shultz.service.PortfolioManager;
 import com.sun.org.apache.bcel.internal.generic.RETURN;
 
 /**
@@ -96,7 +97,7 @@ public class Portfolio {
 			}
 		
 		stocks[this.portfolioSize] = stock;
-		stocks[this.portfolioSize].setStockQuantity(0); // NOT ACTUALLY NEEDED CAUSE WHEN WE CREATE STOCK DEFAULD IS 0.
+		stocks[this.portfolioSize].setStockQuantity(0); // NOT ACTUALLY NEEDED CAUSE WHEN WE CREATE STOCK- DEFAULD IS 0.
 		this.portfolioSize++;
 		return;
 	}
@@ -113,8 +114,7 @@ public class Portfolio {
 			return false;
 		}
 	
-		int i = this.findStock (stockName);
-			
+		int i = this.findStock (stockName);	
 		if(i>-1){
 			if (portfolioSize > 1){
 				this.sellStock(stocks[i].getSymbol(), -1);
@@ -188,60 +188,48 @@ public class Portfolio {
 	 */
 
 	public boolean buyStock(Stock stock, int quantity){
+		// IF THERE IS A PROBLEM WE NEED TO CHECK THIS FUNCTION!!!!!
 		if(stock == null || quantity < -1){
 			System.out.println("There is an error! Please check your stock symbol or stock quntity.");
 			return false;
 		}
+	
+		int stockLocation = this.findStock (stock.getSymbol());
+		
 		if(quantity*stock.getAsk() > this.balance){
 			System.out.println("Not enough balance to complete purchase.");
 			return false;
 		}
-			// THIS BLOCK REFEST TO THE CASE THAT THE STOCK ALREADY EXIST IN OUR STOCK ARRAY.
-		int i = this.findStock (stock.getSymbol());
-			
-		if(i>-1){
-			if(quantity == -1){
-				int howManyToBuy = (int)this.balance/(int)this.stocks[i].getAsk();
-				this.updateBalance(-howManyToBuy*this.stocks[i].getAsk());
-				this.stocks[i].setStockQuantity(this.stocks[i].getStockQuantity()+howManyToBuy);
+		
+		if(stockLocation == MAX_PORTFOLIO_SIZE-1){
+			System.out.println("Please note that the portfolio has reached it's maximum stock capacity.");
+			return false;
+		}
+		
+		
+		if(stockLocation == -1){ 	 			//THE STOCK WAS NOT FOUND IN OUR STOCKS ARRAY
+			this.addStock(stock);				//NEED TO ADD IT TO THE PORTFOLIO ARRAY
+
+		}
+		
+		if(quantity == -1){
+				stockLocation = this.findStock (stock.getSymbol());
+				int howManyToBuy = (int)this.balance/(int)this.stocks[stockLocation].getAsk();
+				this.updateBalance(-howManyToBuy*this.stocks[stockLocation].getAsk());
+				this.stocks[stockLocation].setStockQuantity(this.stocks[stockLocation].getStockQuantity()+howManyToBuy);
 				System.out.println("Entire stock ("+stock.getSymbol()+") holdings that could be bought "
 						+ "was bought succefully.");
 				return true;
 
 			}else {
-				this.updateBalance(-quantity*this.stocks[i].getAsk());
-				this.stocks[i].setStockQuantity(stocks[i].getStockQuantity()+quantity);
+				stockLocation = this.findStock (stock.getSymbol());
+				this.updateBalance(-quantity*this.stocks[stockLocation].getAsk());
+				this.stocks[stockLocation].setStockQuantity(stocks[stockLocation].getStockQuantity()+quantity);
 				System.out.println("An amount of "+quantity+" of stock ("+stock.getSymbol()+") was bought succefully");
 				return true;
 			}
 		}
-
-		
-		
-		// THIS BLOCK REFEST TO THE CASE THAT THE STOCK DOES NOT EXIST IN OUR STOCK ARRAY.
-		if(i == MAX_PORTFOLIO_SIZE-1){
-			System.out.println("Please note that the portfolio has reached it's maximum stock capacity.");
-			return false;
-		}
-
-		if (quantity == -1){
-			this.addStock(stock); //add the stock to portfolioSize-1 in the stocks array.
-			int howManyToBuy = (int)this.balance/(int)this.stocks[i].getAsk();
-			this.updateBalance(-(howManyToBuy*this.stocks[this.portfolioSize-1].getAsk()));
-			this.stocks[i].setStockQuantity(this.stocks[this.portfolioSize-1].getStockQuantity()+howManyToBuy);
-			System.out.println("Entire stock ("+stock.getSymbol()+") holdings that could be bought "
-					+ "was bought succefully.");
-			return true;
-		} else {
-			this.addStock(stock); //add the stock to portfolioSize-1 in the stocks array.
-			this.updateBalance(-quantity*this.stocks[portfolioSize -1].getAsk());
-			this.stocks[this.portfolioSize -1].setStockQuantity(quantity);
-			System.out.println("Stock "+stock.getSymbol()+" was added successfuly to the portfolio. With quantity of "
-					+ quantity+" stocks.");
-			return true;
-
-		}
-	}	
+	
 
 	/**
 	 * Method calculates the portfolio's total stocks value.
@@ -342,4 +330,10 @@ public class Portfolio {
 		return balance;
 	}
 
+	public static void main(String [] args){
+		
+		PortfolioManager portfolioManager= new PortfolioManager();
+		Portfolio portfolio = portfolioManager.getPortfolio();
+		portfolio.getHtmlString();
+	}
 }

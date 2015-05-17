@@ -3,6 +3,11 @@ package com.shultz.service;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.algo.dto.PortfolioTotalStatus;
+import org.algo.exception.PortfolioException;
+import org.algo.model.PortfolioInterface;
+import org.algo.service.PortfolioManagerInterface;
+
 import com.shultz.model.*;
 /**
  * This class represents a Portfolio Manager this class will execute different methods of Portfolio.
@@ -10,7 +15,7 @@ import com.shultz.model.*;
  * @author GalShultz
  * @since 22/4/2015
  */
-public class PortfolioManager {
+public class PortfolioManager implements PortfolioManagerInterface{
 			
 	/**
 	 * Return a new Portfolio instance.
@@ -43,6 +48,8 @@ public class PortfolioManager {
 		
 		return myPortfolio;
 	}
+	
+	
 }
 		
 		
