@@ -1,6 +1,9 @@
 package com.shultz.model;
 import java.text.*;
 import java.util.*;
+
+import org.algo.model.StockInterface;
+
 import com.shultz.model.Portfolio.ALGO_RECOMMENDATION;
 /**
  * This class represents a Stock of Stocks.
@@ -13,7 +16,7 @@ import com.shultz.model.Portfolio.ALGO_RECOMMENDATION;
  * @author GalShultz
  * @since 22/4/2015
  */
-public class Stock {
+public class Stock implements StockInterface{
 	
 
 	private String symbol;
