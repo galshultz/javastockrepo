@@ -40,6 +40,21 @@ public class Portfolio implements PortfolioInterface{
 	 * @see com.shultz.model.Stock
 	 * @author GalShultz
 	 */
+	public Portfolio() {
+		this.title = new String("Temporary Title");
+		this.stocks = new Stock[MAX_PORTFOLIO_SIZE];
+		this.portfolioSize = 0;
+		this.balance = 0;
+	}
+	/**
+	 * Copy C'tor of Portfolio.
+	 * Creates an instance of an array of Stocks {@link com.shultz.model.Stock}
+	 * Set the Portfolio Size to start as 0. And sets the portfolio name as string received.
+	 * @param title
+	 * 		  the title of the Portfolio
+	 * @see com.shultz.model.Stock
+	 * @author GalShultz
+	 */
 	
 	public Portfolio(String string) {
 		this.title = string;
@@ -64,15 +79,15 @@ public class Portfolio implements PortfolioInterface{
 
 	/**
 	 * copy an array of stock from one array (old) to new empty array (new).
-	 * @param oldStocksArray
-	 * @param newStocksArray
+	 * @param oldStockInterfaces
+	 * @param  (Stock)newStockInterfaces
 	 * @author GalShultz
 	 */
 	
-	private void copyStocksArray(Stock[] oldStocksArray, Stock[] newStocksArray ){
+	private void copyStocksArray(StockInterface[] oldStockInterfaces, StockInterface[] newStockInterfaces ){
 			
 		for(int i = 0; i<this.portfolioSize; i++){
-			newStocksArray[i]= new Stock (oldStocksArray[i]);
+			 newStockInterfaces[i]= new Stock ((Stock)oldStockInterfaces[i]);
 		
 		}
 	}
@@ -92,7 +107,7 @@ public class Portfolio implements PortfolioInterface{
 			System.out.println("There is an error with stock received! (Check if it it istanciated)");
 			return;
 		}else {
-				int i = this.findStock (stock.getSymbol());
+				int i = this.findStockPlace (stock.getSymbol());
 				if(i != -1){
 					System.out.println("Stock already exists in portfolio.");
 					return;
@@ -117,7 +132,7 @@ public class Portfolio implements PortfolioInterface{
 			return false;
 		}
 	
-		int i = this.findStock (stockName);	
+		int i = this.findStockPlace (stockName);	
 		if(i>-1){
 			if (portfolioSize > 1){
 				this.sellStock(stocks[i].getSymbol(), -1);
@@ -155,7 +170,7 @@ public class Portfolio implements PortfolioInterface{
 			return false;
 		}
 		
-		int i = this.findStock (symbol);
+		int i = this.findStockPlace (symbol);
 		
 		if(i>-1){	
 			if(((Stock) this.stocks[i]).getStockQuantity() - quantity < 0){
@@ -197,7 +212,7 @@ public class Portfolio implements PortfolioInterface{
 			return false;
 		}
 	
-		int stockLocation = this.findStock (stock.getSymbol());
+		int stockLocation = this.findStockPlace (stock.getSymbol());
 		
 		if(quantity*stock.getAsk() > this.balance){
 			System.out.println("Not enough balance to complete purchase.");
@@ -216,7 +231,7 @@ public class Portfolio implements PortfolioInterface{
 		}
 		
 		if(quantity == -1){
-				stockLocation = this.findStock (stock.getSymbol());
+				stockLocation = this.findStockPlace (stock.getSymbol());
 				int howManyToBuy = (int)this.balance/(int)this.stocks[stockLocation].getAsk();
 				this.updateBalance(-howManyToBuy*this.stocks[stockLocation].getAsk());
 				((Stock) this.stocks[stockLocation]).setStockQuantity(((Stock) this.stocks[stockLocation]).getStockQuantity()+howManyToBuy);
@@ -225,7 +240,7 @@ public class Portfolio implements PortfolioInterface{
 				return true;
 
 			}else {
-				stockLocation = this.findStock (stock.getSymbol());
+				stockLocation = this.findStockPlace (stock.getSymbol());
 				this.updateBalance(-quantity*this.stocks[stockLocation].getAsk());
 				((Stock) this.stocks[stockLocation]).setStockQuantity(((Stock) stocks[stockLocation]).getStockQuantity()+quantity);
 				System.out.println("An amount of "+quantity+" of stock ("+stock.getSymbol()+") was bought succefully");
@@ -302,6 +317,20 @@ public class Portfolio implements PortfolioInterface{
 	 * @return place of a stock in the stocks array.
 	 * 		 -1 if the stock was not found in the array.
 	 */
+	private int findStockPlace (String stockToFind){
+		for(int i = 0; i< this.portfolioSize; i++){
+			if(stockToFind.equals(this.stocks[i].getSymbol())){
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	/**
+	 * Find the place of a stock in stocks array.
+	 * @param stockToFind
+	 * @return .
+	 */
 	private int findStock (String stockToFind){
 		for(int i = 0; i< this.portfolioSize; i++){
 			if(stockToFind.equals(this.stocks[i].getSymbol())){
@@ -324,7 +353,7 @@ public class Portfolio implements PortfolioInterface{
 	public void setStocks(Stock[] stocks) {
 		this.stocks = stocks;
 	}
-	public static int getMaxPortfolioSize() {
+	public static int getMaxSize() {
 		return MAX_PORTFOLIO_SIZE;
 	}
 	public int getPortfolioSize() {
@@ -334,10 +363,10 @@ public class Portfolio implements PortfolioInterface{
 		return balance;
 	}
 
-	public static void main(String [] args){
-		
-		PortfolioManager portfolioManager= new PortfolioManager();
-		Portfolio portfolio = portfolioManager.getPortfolio();
-		portfolio.getHtmlString();
-	}
+//	public static void main(String [] args){
+//		
+//		PortfolioManager portfolioManager= new PortfolioManager();
+//		Portfolio portfolio = portfolioManager.getPortfolio();
+//		portfolio.getHtmlString();
+//	}
 }
