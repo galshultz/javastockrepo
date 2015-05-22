@@ -46,6 +46,13 @@ public class Portfolio implements PortfolioInterface{
 		this.portfolioSize = 0;
 		this.balance = 0;
 	}
+	
+	public Portfolio(Stock[] receivedStocksArray) {
+		this.title = new String("Temporary Title");
+		this.stocks = receivedStocksArray;
+		this.portfolioSize = portfolioSizeMethod(receivedStocksArray);
+		this.balance = 0;
+	}
 	/**
 	 * Copy C'tor of Portfolio.
 	 * Creates an instance of an array of Stocks {@link com.shultz.model.Stock}
@@ -327,17 +334,28 @@ public class Portfolio implements PortfolioInterface{
 	}
 	
 	/**
-	 * Find the place of a stock in stocks array.
+	 * return stock if found in stocks array otherwise return null.
 	 * @param stockToFind
 	 * @return .
 	 */
-	private int findStock (String stockToFind){
+	public Stock findStock (String stockToFind){
 		for(int i = 0; i< this.portfolioSize; i++){
 			if(stockToFind.equals(this.stocks[i].getSymbol())){
+				return (Stock)this.stocks[i];
+			}
+		}
+		return null;
+	}
+	
+	private int portfolioSizeMethod (Stock [] array){
+		int i;
+		for(i=0 ; i< array.length ; i++){
+			if (array[i] == null){
 				return i;
 			}
 		}
-		return -1;
+		return i;
+	
 	}
 	
 	public String getTitle() {

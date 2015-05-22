@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.shultz.model.Portfolio;
+import com.shultz.model.Portfolio.ALGO_RECOMMENDATION;
 import com.shultz.model.Stock;
 
 import org.algo.dto.PortfolioDto;
@@ -29,8 +30,6 @@ import org.algo.service.ServiceManager;
  * @since 22/4/2015
  */
 public class PortfolioManager implements PortfolioManagerInterface {
-
-	public enum ALGO_RECOMMENDATION {BUY, SELL, REMOVE, HOLD }
 
 
 	private DatastoreService datastoreService = ServiceManager.datastoreService();
@@ -190,7 +189,7 @@ public class PortfolioManager implements PortfolioManagerInterface {
 		newStock.setSymbol(stockDto.getSymbol());
 		newStock.setAsk(stockDto.getAsk());
 		newStock.setBid(stockDto.getBid());
-		newStock.setDate(stockDto.getDate().getTime());
+		newStock.setDate(stockDto.getDate());
 		newStock.setStockQuantity(stockDto.getQuantity());
 		if(stockDto.getRecommendation() != null) newStock.setRecommendation(ALGO_RECOMMENDATION.valueOf(stockDto.getRecommendation()));
 
