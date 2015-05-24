@@ -1,6 +1,7 @@
 package com.shultz.model;
 import java.text.*;
 import java.util.*;
+
 import org.algo.model.StockInterface;
 
 import com.shultz.model.Portfolio.ALGO_RECOMMENDATION;
@@ -36,7 +37,7 @@ public class Stock implements StockInterface{
 		this.symbol = new String();
 		this.bid = 0;
 		this.ask = 0;
-		this.date = date;
+		this.date = new Date();
 		this.recommendation = ALGO_RECOMMENDATION.HOLD;
 		this.stockQuantity = 0;				
 	}
@@ -76,7 +77,6 @@ public class Stock implements StockInterface{
 		this.stockQuantity = oldStock.getStockQuantity();
 	}
 	
-
 	/**
 	 * Method uses the stock's details.
 	 * @return string with stock's details in HTML code.
@@ -123,7 +123,8 @@ public class Stock implements StockInterface{
 		this.date = date;
 	}
 	public void setRecommendation(ALGO_RECOMMENDATION valueOf) {
-		this.recommendation = valueOf;		
+		this.recommendation = valueOf;
+		
 	}
 	
 }

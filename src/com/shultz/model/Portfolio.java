@@ -46,11 +46,19 @@ public class Portfolio implements PortfolioInterface{
 		this.portfolioSize = 0;
 		this.balance = 0;
 	}
-	
-	public Portfolio(Stock[] receivedStocksArray) {
+	/**
+	 * C'tor of Portfolio.
+	 * Creates an instance of an array of Stocks {@link com.shultz.model.Stock}
+	 * Set the Portfolio Size to start as 0.
+	 * @param title
+	 * 		  the title of the Portfolio
+	 * @see com.shultz.model.Stock
+	 * @author GalShultz
+	 */
+	public Portfolio(Stock[] stocksArray) {
 		this.title = new String("Temporary Title");
-		this.stocks = receivedStocksArray;
-		this.portfolioSize = portfolioSizeMethod(receivedStocksArray);
+		this.stocks = stocksArray;
+		this.portfolioSize = getPortfolioSizeMethod(stocksArray);
 		this.balance = 0;
 	}
 	/**
@@ -334,28 +342,33 @@ public class Portfolio implements PortfolioInterface{
 	}
 	
 	/**
-	 * return stock if found in stocks array otherwise return null.
+	 * Find the place of a stock in stocks array.
 	 * @param stockToFind
 	 * @return .
 	 */
-	public Stock findStock (String stockToFind){
-		for(int i = 0; i< this.portfolioSize; i++){
+	public StockInterface findStock (String stockToFind){
+		int i = 0;
+		for( i = 0; i< this.portfolioSize; i++){
 			if(stockToFind.equals(this.stocks[i].getSymbol())){
-				return (Stock)this.stocks[i];
+				return this.stocks[i];
 			}
 		}
 		return null;
 	}
 	
-	private int portfolioSizeMethod (Stock [] array){
-		int i;
-		for(i=0 ; i< array.length ; i++){
+	/**
+	 * return the logical portfolio size
+	 * @param array
+	 * @return
+	 */
+	private int getPortfolioSizeMethod(Stock[] array){
+		int i=0;
+		for (i=0; i< MAX_PORTFOLIO_SIZE ; i++){
 			if (array[i] == null){
 				return i;
 			}
 		}
 		return i;
-	
 	}
 	
 	public String getTitle() {
