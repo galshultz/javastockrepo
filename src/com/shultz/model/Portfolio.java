@@ -46,6 +46,7 @@ public class Portfolio implements PortfolioInterface{
 		this.portfolioSize = 0;
 		this.balance = 0;
 	}
+	
 	/**
 	 * C'tor of Portfolio.
 	 * Creates an instance of an array of Stocks {@link com.shultz.model.Stock}
@@ -61,6 +62,8 @@ public class Portfolio implements PortfolioInterface{
 		this.portfolioSize = getPortfolioSizeMethod(stocksArray);
 		this.balance = 0;
 	}
+	
+	
 	/**
 	 * Copy C'tor of Portfolio.
 	 * Creates an instance of an array of Stocks {@link com.shultz.model.Stock}
