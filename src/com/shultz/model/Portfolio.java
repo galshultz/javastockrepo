@@ -42,7 +42,7 @@ public class Portfolio implements PortfolioInterface{
 	 */
 	public Portfolio() {
 		this.title = new String("Temporary Title");
-		this.stocks = new Stock[MAX_PORTFOLIO_SIZE];
+		this.stocks = new StockInterface[MAX_PORTFOLIO_SIZE];
 		this.portfolioSize = 0;
 		this.balance = 0;
 	}
@@ -56,7 +56,7 @@ public class Portfolio implements PortfolioInterface{
 	 * @see com.shultz.model.Stock
 	 * @author GalShultz
 	 */
-	public Portfolio(Stock[] stocksArray) {
+	public Portfolio(StockInterface[] stocksArray) {
 		this.title = new String("Temporary Title");
 		this.stocks = stocksArray;
 		this.portfolioSize = getPortfolioSizeMethod(stocksArray);
@@ -76,7 +76,7 @@ public class Portfolio implements PortfolioInterface{
 	
 	public Portfolio(String string) {
 		this.title = string;
-		this.stocks = new Stock[MAX_PORTFOLIO_SIZE];
+		this.stocks = new StockInterface[MAX_PORTFOLIO_SIZE];
 		this.portfolioSize = 0;
 		this.balance = 0;
 	}
@@ -364,9 +364,9 @@ public class Portfolio implements PortfolioInterface{
 	 * @param array
 	 * @return
 	 */
-	private int getPortfolioSizeMethod(Stock[] array){
+	private int getPortfolioSizeMethod(StockInterface[] array){
 		int i=0;
-		for (i=0; i< MAX_PORTFOLIO_SIZE ; i++){
+		for (i=0; i< array.length ; i++){
 			if (array[i] == null){
 				return i;
 			}
