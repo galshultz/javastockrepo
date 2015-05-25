@@ -17,15 +17,15 @@ import com.shultz.model.Portfolio.ALGO_RECOMMENDATION;
  * @since 22/4/2015
  */
 public class Stock implements StockInterface{
-	
+
 
 	private String symbol;
 	private float bid, ask;
 	private Date date;
 	private ALGO_RECOMMENDATION recommendation;
 	private int stockQuantity;
-	private SimpleDateFormat formDate = new SimpleDateFormat("dd/MM/yyyy");
-	
+	transient private SimpleDateFormat formDate = new SimpleDateFormat("dd/MM/yyyy");
+
 	/* TEMPORARY SITUATION - recommendation and stockQuantity are set to default of 0 
 	   until next exercise or further change by lecturer (orr). */
 
@@ -61,7 +61,7 @@ public class Stock implements StockInterface{
 		this.recommendation = ALGO_RECOMMENDATION.HOLD;
 		this.stockQuantity = 0;				
 	}
-	
+
 	/**
 	 * Copy C'tor of Stock class.
 	 * @param oldStock
@@ -71,12 +71,12 @@ public class Stock implements StockInterface{
 	{
 		// חשוב מאוד לשים לב שבזמן שיצרנו לפני התרגול את האינסטנס
 		//ל״תאריך״ לא יצרנו אינסטנס חדש אלא העתקנו. במצב הנוכחי אנחנו מייצרים אינסטנס חדש
-		
+
 		this(oldStock.getSymbol(),oldStock.getBid(),oldStock.getAsk(),new Date(oldStock.getDate().getTime()));
 		this.recommendation = oldStock.getRecommendation();
 		this.stockQuantity = oldStock.getStockQuantity();
 	}
-	
+
 	/**
 	 * Method uses the stock's details.
 	 * @return string with stock's details in HTML code.
@@ -89,9 +89,9 @@ public class Stock implements StockInterface{
 	public ALGO_RECOMMENDATION getRecommendation() {
 		return recommendation;
 	}
-//	public void setRecommendation(ALGO_RECOMMENDATION recommendation) {
-//		this.recommendation = recommendation;
-//	}
+	//	public void setRecommendation(ALGO_RECOMMENDATION recommendation) {
+	//		this.recommendation = recommendation;
+	//	}
 	public int getStockQuantity() {
 		return stockQuantity;
 	}
@@ -124,7 +124,7 @@ public class Stock implements StockInterface{
 	}
 	public void setRecommendation(ALGO_RECOMMENDATION valueOf) {
 		this.recommendation = valueOf;
-		
+
 	}
-	
+
 }

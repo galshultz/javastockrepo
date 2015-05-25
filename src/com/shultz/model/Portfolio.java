@@ -18,19 +18,19 @@ import com.sun.org.apache.bcel.internal.generic.RETURN;
  */
 @SuppressWarnings("unused")
 public class Portfolio implements PortfolioInterface{
-	
+
 	private static final int MAX_PORTFOLIO_SIZE = 5;
-	
+
 	public enum ALGO_RECOMMENDATION {
 		BUY, SELL, REMOVE, HOLD 
 	}
-	
+
 	private String title;
 	private StockInterface[] stocks;
 	private int portfolioSize;
 	private float balance;
-	
-	
+
+
 	/**
 	 * C'tor of Portfolio.
 	 * Creates an instance of an array of Stocks {@link com.shultz.model.Stock}
@@ -46,7 +46,7 @@ public class Portfolio implements PortfolioInterface{
 		this.portfolioSize = 0;
 		this.balance = 0;
 	}
-	
+
 	/**
 	 * C'tor of Portfolio.
 	 * Creates an instance of an array of Stocks {@link com.shultz.model.Stock}
@@ -58,12 +58,13 @@ public class Portfolio implements PortfolioInterface{
 	 */
 	public Portfolio(StockInterface[] stocksArray) {
 		this.title = new String("Temporary Title");
-		this.stocks = stocksArray;
-		this.portfolioSize = getPortfolioSizeMethod(stocksArray);
+		this.stocks = new StockInterface[MAX_PORTFOLIO_SIZE];
+		this.portfolioSize = stocksArray.length;
+		this.copyStocksArray(stocksArray, stocks);
 		this.balance = 0;
 	}
 	
-	
+
 	/**
 	 * Copy C'tor of Portfolio.
 	 * Creates an instance of an array of Stocks {@link com.shultz.model.Stock}
@@ -73,21 +74,21 @@ public class Portfolio implements PortfolioInterface{
 	 * @see com.shultz.model.Stock
 	 * @author GalShultz
 	 */
-	
+
 	public Portfolio(String string) {
 		this.title = string;
 		this.stocks = new StockInterface[MAX_PORTFOLIO_SIZE];
 		this.portfolioSize = 0;
 		this.balance = 0;
 	}
-	
+
 	/**
 	 * copy C'tor for Portfolio type.
 	 * @param oldPortfolio
 	 * @author GalShultz
 	 */
 	public Portfolio (Portfolio oldPortfolio){
-		
+
 		this(oldPortfolio.getTitle());
 		this.portfolioSize = oldPortfolio.getPortfolioSize();
 		this.updateBalance(oldPortfolio.getBalance());
@@ -101,12 +102,12 @@ public class Portfolio implements PortfolioInterface{
 	 * @param  (Stock)newStockInterfaces
 	 * @author GalShultz
 	 */
-	
+
 	private void copyStocksArray(StockInterface[] oldStockInterfaces, StockInterface[] newStockInterfaces ){
-			
+
 		for(int i = 0; i<this.portfolioSize; i++){
-			 newStockInterfaces[i]= new Stock ((Stock)oldStockInterfaces[i]);
-		
+			newStockInterfaces[i]= new Stock ((Stock)oldStockInterfaces[i]);
+
 		}
 	}
 
@@ -125,38 +126,38 @@ public class Portfolio implements PortfolioInterface{
 			System.out.println("There is an error with stock received! (Check if it it istanciated)");
 			return;
 		}else {
-				int i = this.findStockPlace (stock.getSymbol());
-				if(i != -1){
-					System.out.println("Stock already exists in portfolio.");
-					return;
-				}
+			int i = this.findStockPlace (stock.getSymbol());
+			if(i != -1){
+				System.out.println("Stock already exists in portfolio.");
+				return;
 			}
-		
+		}
+
 		stocks[this.portfolioSize] = stock;
 		((Stock) stocks[this.portfolioSize]).setStockQuantity(0); // NOT ACTUALLY NEEDED CAUSE WHEN WE CREATE STOCK- DEFAULD IS 0.
 		this.portfolioSize++;
 		return;
 	}
-	
-	
+
+
 	/**
 	 * Removes all stocks from portfolio with the same symbol as received. 
 	 * @param stockSymbol : the stock's symbol
 	 */
 	public boolean removeStock(String stockName){
-		
+
 		if (stockName == null){
 			System.out.println("The stock received is invalid!");
 			return false;
 		}
-	
+
 		int i = this.findStockPlace (stockName);	
 		if(i>-1){
 			if (portfolioSize > 1){
 				this.sellStock(stocks[i].getSymbol(), -1);
 				stocks[i] = stocks[this.portfolioSize-1];
 				stocks[this.portfolioSize-1]=null;
-				
+
 			}else  if (this.portfolioSize == 1){
 				this.sellStock(stocks[i].getSymbol(), -1);
 				stocks[i]=null;
@@ -165,9 +166,9 @@ public class Portfolio implements PortfolioInterface{
 			System.out.println("Stock "+stockName+" was deleted as per request");
 			return true;
 		}
-	
-	System.out.println("Stock was not found in this Portfolio");
-	return false;
+
+		System.out.println("Stock was not found in this Portfolio");
+		return false;
 	}
 
 	/**
@@ -180,16 +181,16 @@ public class Portfolio implements PortfolioInterface{
 	 * @param quantity
 	 * @return TRUE in case of success, otherwise FALSE.
 	 */
-	
+
 	public boolean sellStock(String symbol, int quantity){
-	
+
 		if(symbol == null || quantity < -1){
 			System.out.println("There is an error! Please check your stock symbol or stock quntity.");
 			return false;
 		}
-		
+
 		int i = this.findStockPlace (symbol);
-		
+
 		if(i>-1){	
 			if(((Stock) this.stocks[i]).getStockQuantity() - quantity < 0){
 				System.out.println("Not enough stocks to sell");
@@ -211,7 +212,7 @@ public class Portfolio implements PortfolioInterface{
 		System.out.println("Stock was not found in this Portfolio");
 		return false; 
 	}
-	
+
 	/**
 	 * Method return true if the stock recommendation was updated to BUY otherwise return false. an error will be shown 
 	 * on screen in case of one.
@@ -229,43 +230,43 @@ public class Portfolio implements PortfolioInterface{
 			System.out.println("There is an error! Please check your stock symbol or stock quntity.");
 			return false;
 		}
-	
+
 		int stockLocation = this.findStockPlace (stock.getSymbol());
-		
+
 		if(quantity*stock.getAsk() > this.balance){
 			System.out.println("Not enough balance to complete purchase.");
 			return false;
 		}
-		
+
 		if(stockLocation == MAX_PORTFOLIO_SIZE-1){
 			System.out.println("Please note that the portfolio has reached it's maximum stock capacity.");
 			return false;
 		}
-		
-		
+
+
 		if(stockLocation == -1){ 	 			//THE STOCK WAS NOT FOUND IN OUR STOCKS ARRAY
 			this.addStock(stock);				//NEED TO ADD IT TO THE PORTFOLIO ARRAY
 
 		}
-		
-		if(quantity == -1){
-				stockLocation = this.findStockPlace (stock.getSymbol());
-				int howManyToBuy = (int)this.balance/(int)this.stocks[stockLocation].getAsk();
-				this.updateBalance(-howManyToBuy*this.stocks[stockLocation].getAsk());
-				((Stock) this.stocks[stockLocation]).setStockQuantity(((Stock) this.stocks[stockLocation]).getStockQuantity()+howManyToBuy);
-				System.out.println("Entire stock ("+stock.getSymbol()+") holdings that could be bought "
-						+ "was bought succefully.");
-				return true;
 
-			}else {
-				stockLocation = this.findStockPlace (stock.getSymbol());
-				this.updateBalance(-quantity*this.stocks[stockLocation].getAsk());
-				((Stock) this.stocks[stockLocation]).setStockQuantity(((Stock) stocks[stockLocation]).getStockQuantity()+quantity);
-				System.out.println("An amount of "+quantity+" of stock ("+stock.getSymbol()+") was bought succefully");
-				return true;
-			}
+		if(quantity == -1){
+			stockLocation = this.findStockPlace (stock.getSymbol());
+			int howManyToBuy = (int)this.balance/(int)this.stocks[stockLocation].getAsk();
+			this.updateBalance(-howManyToBuy*this.stocks[stockLocation].getAsk());
+			((Stock) this.stocks[stockLocation]).setStockQuantity(((Stock) this.stocks[stockLocation]).getStockQuantity()+howManyToBuy);
+			System.out.println("Entire stock ("+stock.getSymbol()+") holdings that could be bought "
+					+ "was bought succefully.");
+			return true;
+
+		}else {
+			stockLocation = this.findStockPlace (stock.getSymbol());
+			this.updateBalance(-quantity*this.stocks[stockLocation].getAsk());
+			((Stock) this.stocks[stockLocation]).setStockQuantity(((Stock) stocks[stockLocation]).getStockQuantity()+quantity);
+			System.out.println("An amount of "+quantity+" of stock ("+stock.getSymbol()+") was bought succefully");
+			return true;
 		}
-	
+	}
+
 
 	/**
 	 * Method calculates the portfolio's total stocks value.
@@ -279,18 +280,18 @@ public class Portfolio implements PortfolioInterface{
 		}
 		return totalValue;		
 	}
-	
+
 	/**
 	 * Method calculates the portfolio's total value.
 	 * @return float representing portfolio's total value.
 	 * @author GalShultz
 	 */
 	public float getTotalValue(){
-		
+
 		return this.getStocksValue()+this.balance;		
 	}
-	
-	
+
+
 	/**
 	 * Method uses the portfolio's stock details.
 	 * @return string with portfolio's details in HTML code.
@@ -299,7 +300,7 @@ public class Portfolio implements PortfolioInterface{
 		DecimalFormat decimalFormat=new DecimalFormat("#.#"); // SHOULD WE USE IT OR NOT?
 		String htmlResString = new String();
 		htmlResString = htmlResString+"<h1>"+this.getTitle()+"</h1> <br>";
-		
+
 		for(int i=0; i<portfolioSize; i++)
 		{
 			Stock tempStock = (Stock) stocks[i];
@@ -308,11 +309,11 @@ public class Portfolio implements PortfolioInterface{
 			}
 		}
 		htmlResString += "Total Portfolio Value :"+this.getTotalValue()+ "$, "+
-		"Total Stocks Value :"+this.getStocksValue()+"$, "+"Balance :"+this.balance+"$.";
+				"Total Stocks Value :"+this.getStocksValue()+"$, "+"Balance :"+this.balance+"$.";
 		return htmlResString;	
 	}
-	
-	
+
+
 	/**
 	 * method receives amount and calculates the current balance.
 	 * @param amount
@@ -326,9 +327,9 @@ public class Portfolio implements PortfolioInterface{
 			this.balance = tempBalance;
 			System.out.println("Balance has been updated to "+ this.balance);
 		}
-		
+
 	}
-	
+
 	/**
 	 * Find the place of a stock in stocks array.
 	 * @param stockToFind
@@ -343,7 +344,7 @@ public class Portfolio implements PortfolioInterface{
 		}
 		return -1;
 	}
-	
+
 	/**
 	 * Find the place of a stock in stocks array.
 	 * @param stockToFind
@@ -358,7 +359,7 @@ public class Portfolio implements PortfolioInterface{
 		}
 		return null;
 	}
-	
+
 	/**
 	 * return the logical portfolio size
 	 * @param array
@@ -373,7 +374,7 @@ public class Portfolio implements PortfolioInterface{
 		}
 		return i;
 	}
-	
+
 	public String getTitle() {
 		return title;
 	}
@@ -397,10 +398,10 @@ public class Portfolio implements PortfolioInterface{
 		return balance;
 	}
 
-//	public static void main(String [] args){
-//		
-//		PortfolioManager portfolioManager= new PortfolioManager();
-//		Portfolio portfolio = portfolioManager.getPortfolio();
-//		portfolio.getHtmlString();
-//	}
+	//	public static void main(String [] args){
+	//		
+	//		PortfolioManager portfolioManager= new PortfolioManager();
+	//		Portfolio portfolio = portfolioManager.getPortfolio();
+	//		portfolio.getHtmlString();
+	//	}
 }
