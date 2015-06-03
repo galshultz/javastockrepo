@@ -6,6 +6,7 @@ import org.algo.model.PortfolioInterface;
 import org.algo.model.StockInterface;
 
 import com.shultz.*;
+import com.shultz.exception.BalanceException;
 import com.shultz.service.PortfolioManager;
 import com.sun.org.apache.bcel.internal.generic.RETURN;
 
@@ -57,11 +58,9 @@ public class Portfolio implements PortfolioInterface{
 	 * @author GalShultz
 	 */
 	public Portfolio(StockInterface[] stocksArray) {
-		this.title = new String("Temporary Title");
-		this.stocks = new StockInterface[MAX_PORTFOLIO_SIZE];
+		this();
 		this.portfolioSize = stocksArray.length;
 		this.copyStocksArray(stocksArray, stocks);
-		this.balance = 0;
 	}
 	
 
@@ -319,7 +318,7 @@ public class Portfolio implements PortfolioInterface{
 	 * @param amount
 	 * @author GalShultz
 	 */
-	public void updateBalance (float amount){
+	public void updateBalance (float amount) throws BalanceException{
 		float tempBalance = this.balance + amount;
 		if(tempBalance < 0){
 			System.out.println("Please note you may not change balance to negative amount!");

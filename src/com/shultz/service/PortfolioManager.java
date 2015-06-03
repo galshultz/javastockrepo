@@ -20,6 +20,7 @@ import org.algo.service.MarketService;
 import org.algo.service.PortfolioManagerInterface;
 import org.algo.service.ServiceManager;
 
+import com.shultz.exception.BalanceException;
 import com.shultz.model.Portfolio;
 import com.shultz.model.Portfolio.ALGO_RECOMMENDATION;
 import com.shultz.model.Stock;
@@ -319,7 +320,12 @@ public class PortfolioManager implements PortfolioManagerInterface {
 	 */
 	public void updateBalance(float value) { 
 		Portfolio portfolio = (Portfolio) getPortfolio();
-		portfolio.updateBalance(value);
+		try{
+			portfolio.updateBalance(value);
+		}catch(BalanceException e){
+			System.out.println(e.getMessage());
+		}
+		
 		flush(portfolio);
 	}
 
