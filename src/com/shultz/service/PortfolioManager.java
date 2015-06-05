@@ -21,6 +21,9 @@ import org.algo.service.PortfolioManagerInterface;
 import org.algo.service.ServiceManager;
 
 import com.shultz.exception.BalanceException;
+import com.shultz.exception.PortfolioFullException;
+import com.shultz.exception.StockAlreadyExistsException;
+import com.shultz.exception.StockNotExistException;
 import com.shultz.model.Portfolio;
 import com.shultz.model.Portfolio.ALGO_RECOMMENDATION;
 import com.shultz.model.Stock;
@@ -141,14 +144,25 @@ public class PortfolioManager implements PortfolioManagerInterface {
 			//first thing, add it to portfolio.
 			//portfolio.addStock(stock,0);   
 
-			portfolio.addStock(stock);   
+			try {
+				portfolio.addStock(stock);
+			} catch (PortfolioFullException e) {
+				e.getMessage();
+				e.printStackTrace();
+			}   
 
 			//second thing, save the new stock to the database.
-			datastoreService.saveStock(toDto(portfolio.findStock(symbol)));
+			try {
+				datastoreService.saveStock(toDto(portfolio.findStock(symbol)));
+			} catch (StockNotExistException e) {
+				e.getMessage();
+				e.printStackTrace();
+			}
 
 			flush(portfolio);
-		} catch (SymbolNotFoundInNasdaq e) {
-			System.out.println("Stock Not Exists: "+symbol);
+		} catch (SymbolNotFoundInNasdaq | StockAlreadyExistsException e) {
+			e.getMessage();
+			e.printStackTrace();
 		}
 	}
 
@@ -301,7 +315,15 @@ public class PortfolioManager implements PortfolioManagerInterface {
 	@Override
 	public void sellStock(String symbol, int quantity) throws PortfolioException {
 		Portfolio portfolio = (Portfolio) getPortfolio();
-		portfolio.sellStock(symbol, quantity);
+		try {
+			portfolio.sellStock(symbol, quantity);
+		} catch (StockNotExistException e) {
+			e.getMessage();
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.getMessage();
+			e.printStackTrace();
+		}
 		flush(portfolio);
 	}
 
@@ -309,23 +331,32 @@ public class PortfolioManager implements PortfolioManagerInterface {
 	 * Remove stock
 	 */
 	@Override
-	public void removeStock(String symbol) { 
+	public void removeStock(String symbol) throws PortfolioException{ 
 		Portfolio portfolio = (Portfolio) getPortfolio();
-		portfolio.removeStock(symbol);
+		try {
+			portfolio.removeStock(symbol);
+		} catch (StockNotExistException e) {
+			e.getMessage();
+			e.printStackTrace();
+		} catch (BalanceException e) {
+			e.getMessage();
+			e.printStackTrace();
+		}
 		flush(portfolio);
 	}
 
 	/**
 	 * update portfolio balance
 	 */
-	public void updateBalance(float value) { 
+	public void updateBalance(float value) throws PortfolioException{ 
 		Portfolio portfolio = (Portfolio) getPortfolio();
-		try{
-			portfolio.updateBalance(value);
-		}catch(BalanceException e){
-			System.out.println(e.getMessage());
-		}
 		
+		try {
+			portfolio.updateBalance(value);
+		} catch (BalanceException e) {
+			e.getMessage();
+			e.printStackTrace();
+		}
 		flush(portfolio);
 	}
 

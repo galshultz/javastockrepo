@@ -4,6 +4,10 @@ public class BalanceException extends Exception{
 	
 
 	public BalanceException(){
-		super("Please note you may not change balance to negative amount!");
+		super("There is not enough BALANCE in Portfolio");
+	}
+	
+	public BalanceException(String errorString){
+		super(errorString);
 	}
 }
