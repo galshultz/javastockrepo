@@ -233,7 +233,7 @@ public class Portfolio implements PortfolioInterface{
 	 * @return TRUE in case of success, otherwise FALSE.
 	 */
 
-	public void buyStock(Stock stock, int quantity) throws PortfolioFullException, StockAlreadyExistsException, StockNotExistException{
+	public void buyStock(Stock stock, int quantity) throws PortfolioFullException,BalanceException, StockAlreadyExistsException, StockNotExistException{
 		// IF THERE IS A PROBLEM WE NEED TO CHECK THIS FUNCTION!!!!!
 		if(stock == null || quantity < -1){
 			System.out.println("There is an error! Please check your stock symbol or stock quntity.");
@@ -244,13 +244,11 @@ public class Portfolio implements PortfolioInterface{
 		stockLocation = this.findStockPlace (stock.getSymbol());
 
 		if(quantity*stock.getAsk() > this.balance){
-			System.out.println("Not enough balance to complete purchase.");
-			return;
+			throw new BalanceException();
 		}
 
 		if(stockLocation == MAX_PORTFOLIO_SIZE-1){
-			System.out.println("Please note that the portfolio has reached it's maximum stock capacity.");
-			return;
+			throw new PortfolioFullException();
 		}
 
 
