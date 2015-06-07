@@ -1,6 +1,8 @@
 package com.shultz.exception;
 
-public class StockAlreadyExistsException extends Exception{
+import org.algo.exception.PortfolioException;
+
+public class StockAlreadyExistsException extends PortfolioException{
 	
 	public StockAlreadyExistsException(){
 		super("Stock already exists in portfolio.");

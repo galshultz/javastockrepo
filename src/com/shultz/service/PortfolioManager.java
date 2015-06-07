@@ -132,7 +132,7 @@ public class PortfolioManager implements PortfolioManagerInterface {
 	 * Add stock to portfolio 
 	 */
 	@Override
-	public void addStock(String symbol) {
+	public void addStock(String symbol) throws PortfolioException{
 		Portfolio portfolio = (Portfolio) getPortfolio();
 
 		try {
@@ -149,7 +149,12 @@ public class PortfolioManager implements PortfolioManagerInterface {
 			} catch (PortfolioFullException e) {
 				e.getMessage();
 				e.printStackTrace();
-			}   
+				throw e;
+			}  catch (StockAlreadyExistsException e){
+				e.getMessage();
+				e.printStackTrace();
+				throw e;
+			}
 
 			//second thing, save the new stock to the database.
 			try {
@@ -157,10 +162,11 @@ public class PortfolioManager implements PortfolioManagerInterface {
 			} catch (StockNotExistException e) {
 				e.getMessage();
 				e.printStackTrace();
+				throw e;
 			}
 
 			flush(portfolio);
-		} catch (SymbolNotFoundInNasdaq | StockAlreadyExistsException e) {
+		} catch (SymbolNotFoundInNasdaq e) {
 			e.getMessage();
 			e.printStackTrace();
 		}
@@ -320,9 +326,12 @@ public class PortfolioManager implements PortfolioManagerInterface {
 		} catch (StockNotExistException e) {
 			e.getMessage();
 			e.printStackTrace();
+			throw e;
+			
 		} catch (Exception e) {
 			e.getMessage();
 			e.printStackTrace();
+			throw e;
 		}
 		flush(portfolio);
 	}
@@ -338,9 +347,11 @@ public class PortfolioManager implements PortfolioManagerInterface {
 		} catch (StockNotExistException e) {
 			e.getMessage();
 			e.printStackTrace();
+			throw e;
 		} catch (BalanceException e) {
 			e.getMessage();
 			e.printStackTrace();
+			throw e;
 		}
 		flush(portfolio);
 	}
@@ -356,6 +367,7 @@ public class PortfolioManager implements PortfolioManagerInterface {
 		} catch (BalanceException e) {
 			e.getMessage();
 			e.printStackTrace();
+			throw e;
 		}
 		flush(portfolio);
 	}

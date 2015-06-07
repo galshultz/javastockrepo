@@ -1,7 +1,9 @@
 package com.shultz.exception;
 
+import org.algo.exception.PortfolioException;
 
-public class StockNotExistException extends Exception{
+
+public class StockNotExistException extends PortfolioException{
 	
 	public StockNotExistException(){
 		super("Stock Was not found in portfolio");

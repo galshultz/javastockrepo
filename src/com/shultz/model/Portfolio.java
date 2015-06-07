@@ -115,7 +115,7 @@ public class Portfolio implements PortfolioInterface{
 
 	/**
 	 * Add Stock to the portfolio's array of stocks.
-	 * @param stock : a refferance of Stock type
+	 * @param stock : a reference of Stock type
 	 * @author GalShultz
 	 */
 	
@@ -146,41 +146,42 @@ public class Portfolio implements PortfolioInterface{
 	 * Removes all stocks from portfolio with the same symbol as received. 
 	 * @param stockSymbol : the stock's symbol
 	 */
-	public boolean removeStock(String stockName) throws StockNotExistException, BalanceException{
+	public void removeStock(String stockName) throws StockNotExistException, BalanceException{
 		int i =0;
 		if (stockName == null){
-			System.out.println("The stock received is invalid!");
-			return false;
+			throw new StockNotExistException("The stock received is invalid!");
 		}
 
 		i = this.findStockPlace (stockName);
-		
+
 		if(i>-1){
 			if (portfolioSize > 1){
 				try {
 					this.sellStock(stocks[i].getSymbol(), -1);
-				} catch (Exception e) {
+				} catch (StockNotExistException e) {
 					e.getMessage();
 					e.printStackTrace();
-				}
+					throw e;
+				} 
 				stocks[i] = stocks[this.portfolioSize-1];
 				stocks[this.portfolioSize-1]=null;
 
 			}else  if (this.portfolioSize == 1){
 				try {
 					this.sellStock(stocks[i].getSymbol(), -1);
-				} catch (Exception e) {
+				} catch (StockNotExistException e) {
 					e.getMessage();
 					e.printStackTrace();
+					throw e;
 				}
 				stocks[i]=null;
 			}
 			portfolioSize--;
 			System.out.println("Stock "+stockName+" was deleted as per request");
-			return true;
 		}
-
-		throw new StockNotExistException();
+		else{
+			throw new StockNotExistException();
+		}
 	}
 
 	/**
@@ -194,17 +195,17 @@ public class Portfolio implements PortfolioInterface{
 	 * @return TRUE in case of success, otherwise FALSE.
 	 */
 
-	public void sellStock(String symbol, int quantity) throws Exception, StockNotExistException{
+	public void sellStock(String symbol, int quantity) throws IllegalArgumentException, StockNotExistException,BalanceException{
 
 		if(symbol == null || quantity < -1){
-			throw new Exception("There is an error! Please check your stock symbol or stock quntity.");
+			throw new IllegalArgumentException("There is an error! Please check your stock symbol or stock quntity.");
 		}
 
 		int i = this.findStockPlace (symbol);
 
 		if(i>-1){	
 			if(((Stock) this.stocks[i]).getStockQuantity() - quantity < 0){
-				throw new Exception("Not enough stocks to sell");
+				throw new IllegalArgumentException("Not enough stocks to sell");
 			}else if(quantity == -1){
 				this.updateBalance(((Stock) this.stocks[i]).getStockQuantity()*this.stocks[i].getBid());
 				((Stock) this.stocks[i]).setStockQuantity(0);
@@ -259,6 +260,7 @@ public class Portfolio implements PortfolioInterface{
 			} catch (StockAlreadyExistsException e) {
 				e.getMessage();
 				e.printStackTrace();
+				throw e;
 			}				
 
 		}

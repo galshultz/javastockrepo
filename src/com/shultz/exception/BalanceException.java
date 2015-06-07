@@ -1,6 +1,8 @@
 package com.shultz.exception;
 
-public class BalanceException extends Exception{
+import org.algo.exception.PortfolioException;
+
+public class BalanceException extends PortfolioException{
 	
 
 	public BalanceException(){
