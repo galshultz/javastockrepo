@@ -176,7 +176,7 @@ public class PortfolioManager implements PortfolioManagerInterface {
 	 * Buy stock
 	 */
 	@Override
-	public void buyStock(String symbol, int quantity) throws PortfolioException{
+	public void buyStock(String symbol, int quantity) throws PortfolioException, BalanceException,IllegalArgumentException{
 		try {
 			Portfolio portfolio = (Portfolio) getPortfolio();
 
@@ -186,8 +186,19 @@ public class PortfolioManager implements PortfolioManagerInterface {
 			}
 
 			portfolio.buyStock(stock, quantity);
+
 			flush(portfolio);
+		}catch (IllegalArgumentException e){
+			e.getMessage();
+			e.getStackTrace();
+			throw e;
+		}catch (BalanceException e){
+			e.getMessage();
+			e.getStackTrace();
+			throw e;
 		}catch (Exception e) {
+			e.getMessage();
+			e.getStackTrace();
 			System.out.println("Exception: "+e);
 		}
 	}
@@ -327,7 +338,7 @@ public class PortfolioManager implements PortfolioManagerInterface {
 			e.getMessage();
 			e.printStackTrace();
 			throw e;
-			
+
 		} catch (Exception e) {
 			e.getMessage();
 			e.printStackTrace();
@@ -361,7 +372,7 @@ public class PortfolioManager implements PortfolioManagerInterface {
 	 */
 	public void updateBalance(float value) throws PortfolioException{ 
 		Portfolio portfolio = (Portfolio) getPortfolio();
-		
+
 		try {
 			portfolio.updateBalance(value);
 		} catch (BalanceException e) {

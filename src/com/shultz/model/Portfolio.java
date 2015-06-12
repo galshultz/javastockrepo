@@ -65,7 +65,7 @@ public class Portfolio implements PortfolioInterface{
 		this.portfolioSize = stocksArray.length;
 		this.copyStocksArray(stocksArray, stocks);
 	}
-	
+
 
 	/**
 	 * Copy C'tor of Portfolio.
@@ -118,14 +118,14 @@ public class Portfolio implements PortfolioInterface{
 	 * @param stock : a reference of Stock type
 	 * @author GalShultz
 	 */
-	
+
 	public void addStock(Stock stock) throws StockAlreadyExistsException, PortfolioFullException{
 
 		if(this.portfolioSize == MAX_PORTFOLIO_SIZE){
 			throw new PortfolioFullException();
 		}else if (stock == null){
 			System.out.println("There is an error with stock received! (Check if it it istanciated)");
-			
+
 		}else {
 			int i = this.findStockPlace (stock.getSymbol());
 			if(i != -1){
@@ -140,7 +140,7 @@ public class Portfolio implements PortfolioInterface{
 	}
 
 
-	
+
 
 	/**
 	 * Removes all stocks from portfolio with the same symbol as received. 
@@ -220,7 +220,7 @@ public class Portfolio implements PortfolioInterface{
 			}
 		}
 		throw new StockNotExistException("Stock was not found in this Portfolio");
-	
+
 	}
 
 	/**
@@ -234,11 +234,10 @@ public class Portfolio implements PortfolioInterface{
 	 * @return TRUE in case of success, otherwise FALSE.
 	 */
 
-	public void buyStock(Stock stock, int quantity) throws PortfolioFullException,BalanceException, StockAlreadyExistsException, StockNotExistException{
+	public void buyStock(Stock stock, int quantity) throws IllegalArgumentException, PortfolioFullException,BalanceException, StockAlreadyExistsException, StockNotExistException{
 		// IF THERE IS A PROBLEM WE NEED TO CHECK THIS FUNCTION!!!!!
 		if(stock == null || quantity < -1){
-			System.out.println("There is an error! Please check your stock symbol or stock quntity.");
-			return;
+			throw new IllegalArgumentException("There is an error! Please check your stock symbol or stock quntity.");
 		}
 
 		int stockLocation = 0;
@@ -256,7 +255,7 @@ public class Portfolio implements PortfolioInterface{
 		if(stockLocation == -1){ 	 			//THE STOCK WAS NOT FOUND IN OUR STOCKS ARRAY
 			try {								//NEED TO ADD IT TO THE PORTFOLIO ARRAY
 				this.addStock(stock);
-			
+
 			} catch (StockAlreadyExistsException e) {
 				e.getMessage();
 				e.printStackTrace();
@@ -267,13 +266,14 @@ public class Portfolio implements PortfolioInterface{
 
 		if(quantity == -1){
 			stockLocation = this.findStockPlace (stock.getSymbol());
-			
+
 			int howManyToBuy = (int)this.balance/(int)this.stocks[stockLocation].getAsk();
 			try {
 				this.updateBalance(-howManyToBuy*this.stocks[stockLocation].getAsk());
 			} catch (BalanceException e) {
 				e.getMessage();
 				e.printStackTrace();
+				throw e;
 			}
 			((Stock) this.stocks[stockLocation]).setStockQuantity(((Stock) this.stocks[stockLocation]).getStockQuantity()+howManyToBuy);
 			System.out.println("Entire stock ("+stock.getSymbol()+") holdings that could be bought "
@@ -287,6 +287,7 @@ public class Portfolio implements PortfolioInterface{
 			} catch (BalanceException e) {
 				e.getMessage();
 				e.printStackTrace();
+				throw e;
 			}
 			((Stock) this.stocks[stockLocation]).setStockQuantity(((Stock) stocks[stockLocation]).getStockQuantity()+quantity);
 			System.out.println("An amount of "+quantity+" of stock ("+stock.getSymbol()+") was bought succefully");
